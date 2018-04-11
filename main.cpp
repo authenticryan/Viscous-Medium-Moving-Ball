@@ -1,4 +1,3 @@
-//#include <GL/glew.h>
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
 #include "gl_helper.h"
@@ -17,7 +16,7 @@ int RightY=0;
 int Racketspeed=5;
 
 int ballX,ballY;
-int ballVelocityX = 1;
+int ballVelocityX = 4;
 float ballVelocityY =0.0f;
 float StoredVelocity = 0.0f;
 
@@ -31,22 +30,6 @@ void Reset();
 void Collisions();
 bool Between(int target, int min , int max );
 
-void KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods){
-
-//Left Control UP
-    if(key == GLFW_KEY_UP){
-        RightY-=Racketspeed;}
-//Left Control Down
-    if(key == GLFW_KEY_DOWN){
-        RightY+=Racketspeed;}
-//Right Control UP
-    if(key == GLFW_KEY_W){
-        LeftY-=Racketspeed;}
-//Right Control Down
-    if(key == GLFW_KEY_S){
-        LeftY+=Racketspeed;}
-
-}
 
 
 int main()
@@ -62,16 +45,19 @@ int main()
     window = glfwCreateWindow( width , height , "Pong" , NULL , NULL );
     glfwMakeContextCurrent(window);
 
-    glfwSetKeyCallback( window , KeyCallBack );
 
 
      //Ball Starting position
      ballX = width/2 - 5 ;
      ballY = height/2 - 5;
 
-     //Racket Starting Y Position
-     LeftY = height/2 - 50;
-     RightY = height/2 - 50;
+        // initial ball velocity
+     ballVelocityY= 3;
+     
+
+
+    LeftY = 0;
+    RightY = 0;
 
      time1 = glfwGetTime()*TimeSpeed;
 
@@ -96,6 +82,7 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
+
         //Collision Detection
         Collisions();
 
@@ -105,14 +92,6 @@ int main()
         gl_helper::DrawRect( width - 10 , RightY , RacketWidth , RacketHeight  );
         //Ball
         gl_helper::DrawRect( ballX , ballY , BallWidth , BallHeight  );
-
-        //Left Score
-        gl_helper::DrawNumber( width/2 - 40 , 10 , LeftScore );
-        //Right Score
-        gl_helper::DrawNumber( width/2 + 10 , 10 , RightScore );
-        //Colon
-        gl_helper::DrawRect( width/2 - 2 , 25 , 5 , 5 );
-        gl_helper::DrawRect( width/2 - 2 , 45 , 5 , 5 );
 
         glfwSwapBuffers(window);
         glfwSwapInterval(1);
@@ -136,12 +115,13 @@ void Collisions(){
 
         StoredVelocity += ballVelocityY;
 
-        if(StoredVelocity > 1.0f){
+        // To ensure that the ball bounces
+        if(StoredVelocity > 3.0f){
             ballY+=1;
-            StoredVelocity-=1;
-        }else if(StoredVelocity < -1.0f){
+            StoredVelocity-=3;
+        }else if(StoredVelocity < -3.0f){
             ballY-=1;
-            StoredVelocity+=1;
+            StoredVelocity+=3;
 
         }
     }
@@ -149,63 +129,27 @@ void Collisions(){
 
     //Ball at Right Edge
     if( ballX > width - RacketWidth*2 ){
-
-        if( Between(ballY, RightY + RacketHeight, RightY )  ){
-
             ballVelocityX= -ballVelocityX;
-
-            if( Between(ballY, RightY, RightY + RacketHeight*0.3 ) ){
-
-                ballVelocityY-=0.3;
-
-            }else if( Between(ballY,  RightY + RacketHeight - RacketHeight*0.3 , RightY + RacketHeight ) ){
-
-                ballVelocityY+=0.3;
-
-            }
-
-
-        }else{
-
-            LeftScore++;
-            Reset();
-
-        }
 
     //Ball at Left Edge
     }else if( ballX < RacketWidth ){
-
-        if( Between(ballY, LeftY + RacketHeight, LeftY )  ){
-
             ballVelocityX= -ballVelocityX;
-
-            if( Between(ballY, LeftY, LeftY + RacketHeight*0.3 ) ){
-
-                ballVelocityY-=0.3;
-
-            }else if( Between(ballY,  LeftY + RacketHeight - RacketHeight*0.3 , RightY + RacketHeight ) ){
-
-                ballVelocityY+=0.3;
-            }
-
-        }else{
-
-            RightScore++;
-            Reset();
-
-        }
 
     //Ball at Top Edge
     }else if( ballY < 0 ){
 
         ballY = 0;
         ballVelocityY= -ballVelocityY;
+        // printf("Ball velocity y: %f", ballVelocityY);
 
     //Ball at Buttom Edge
     }else if( ballY > height - BallHeight ){
 
         ballY = height - BallHeight;
+        printf("Ball velocity y before: %f\n", ballVelocityY);
+        
         ballVelocityY= -ballVelocityY;
+        printf("Ball velocity y: %f\n", ballVelocityY);
 
     }
 
