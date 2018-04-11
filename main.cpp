@@ -7,7 +7,7 @@
 using namespace std;
 
 const int width = 450 , height = 450 ;
-const int RacketWidth = 10 , RacketHeight = 100;
+const int RacketWidth = 10 , RacketHeight = 460;
 const int BallWidth = 10 , BallHeight = 10;
 
 double time1;
