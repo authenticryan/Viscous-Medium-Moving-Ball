@@ -107,9 +107,9 @@ int main()
 
 void Collisions(){
 
-    if( glfwGetTime() - time1 > 1.0 ){
+    // if(true){
 
-        time1 = glfwGetTime()*TimeSpeed;
+        // time1 = glfwGetTime()*TimeSpeed;
 
         ballX += ballVelocityX;
 
@@ -124,7 +124,7 @@ void Collisions(){
             StoredVelocity+=3;
 
         }
-    }
+    // }
 
 
     //Ball at Right Edge
