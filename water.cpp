@@ -163,7 +163,7 @@ void Collisions(){
 
 
     //Ball at Right Edge
-    if( ballX > 440 ){
+    if( ballX > 430 ){
             ballVelocityX= -ballVelocityX;
 
     //Ball at Left Edge
@@ -171,17 +171,17 @@ void Collisions(){
             ballVelocityX= -ballVelocityX;
 
     //Ball at bottom Edge
-    }else if( ballY <= 0 ){
+    }else if( ballY < 0 ){
 
         ballY = 0;
         ballVelocityY= -ballVelocityY;
         // printf("Ball velocity y: %f", ballVelocityY);
 
     //Ball at top Edge
-    }else if( ballY >= 450 ){
+    }else if( ballY > 440 ){
 
 		printf("Ball position in the y axis before: %d\n", ballY);
-        ballY = 450;
+        ballY = 440;
 		printf("Ball position in the y axis: %d\n", ballY);
         printf("Ball velocity y before: %f\n", ballVelocityY);
         
@@ -190,7 +190,7 @@ void Collisions(){
 
     }
 
-	water[f][ballX%WATERSIZE][ballY%WATERSIZE] = -100;
+	water[f][(ballX+5)%WATERSIZE][(ballY+5)%WATERSIZE] = -100;
 
 }
 
