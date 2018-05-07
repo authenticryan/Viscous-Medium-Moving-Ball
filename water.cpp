@@ -163,7 +163,7 @@ void Collisions(){
 
 
     //Ball at Right Edge
-    if( ballX > 430 ){
+    if( ballX > 440 ){
             ballVelocityX= -ballVelocityX;
 
     //Ball at Left Edge
@@ -173,15 +173,15 @@ void Collisions(){
     //Ball at bottom Edge
     }else if( ballY <= 0 ){
 
-        ballY = 10;
+        ballY = 0;
         ballVelocityY= -ballVelocityY;
         // printf("Ball velocity y: %f", ballVelocityY);
 
     //Ball at top Edge
-    }else if( ballY >= 440 ){
+    }else if( ballY >= 450 ){
 
 		printf("Ball position in the y axis before: %d\n", ballY);
-        ballY = 430;
+        ballY = 450;
 		printf("Ball position in the y axis: %d\n", ballY);
         printf("Ball velocity y before: %f\n", ballVelocityY);
         
