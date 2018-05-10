@@ -6,11 +6,7 @@
 #include "gl_helper.h"
 #include <time.h>
 
-
 #define BOUNDS    1
-
-
-
 #define WATERSIZE 450
 #define DAMP 20
 
@@ -143,13 +139,13 @@ void Collisions(){
     if(time_counter > (double)(NUM_SECONDS * CLOCKS_PER_SEC) ){
 
 		time_counter -= (double)(NUM_SECONDS * CLOCKS_PER_SEC);
-        // time1 = glfwGetTime()*TimeSpeed;
 
         ballX += ballVelocityX;
 
         StoredVelocity += ballVelocityY;
 
 		printf("Value of stored velocity %f\n", StoredVelocity);
+
         // To ensure that the ball bounces
         if(StoredVelocity > 10.0f){
             ballY+=1;
@@ -175,7 +171,6 @@ void Collisions(){
 
         ballY = 0;
         ballVelocityY= -ballVelocityY;
-        // printf("Ball velocity y: %f", ballVelocityY);
 
     //Ball at top Edge
     }else if( ballY > 440 ){
@@ -227,7 +222,6 @@ void display(void) {
 		
 		glPushMatrix();
 
-		// glMatrixMode(GL_PROJECTION);
 
         glLoadIdentity();
 
@@ -254,10 +248,6 @@ void display(void) {
 
         //Collision Detection
         Collisions();
-	
-	
-		
-
 
 		glPopMatrix();
 	// end of code from main.cpp
@@ -284,73 +274,25 @@ void display(void) {
 
 	tmp = t; t = f; f = tmp;
 
-
     glPopMatrix();
-
-    
+ 
 	glutSwapBuffers();
-    
 
-		
 }
 
 int num  = 0;
 int delay = 70;
 void idle(void)
 {
-	
-	// if(!(++num %delay))
-	// {
-	// 	water[f][rand()%WATERSIZE][rand()%WATERSIZE] = -rand()%200;
-	// 	delay = rand()%100 + 50;
-	// }
     glutPostRedisplay();
 }
-
-
-// void
-// keyboard(unsigned char key, int x, int y)
-// {
-//     static int old_x = 50;
-//     static int old_y = 50;
-//     static int old_width = 512;
-//     static int old_height = 512;
-
-//     // switch (key) {
-//     //     case 'x':
-//     //             exit(0);
-//     //         break;
-//     //     case 'm':
-//     //             glutPositionWindow(old_x, old_y);
-//     //             glutReshapeWindow(old_width, old_height);
-//     //         break;
-//     //     // case 'f':
-//     //     //     if (glutGet(GLUT_WINDOW_WIDTH) < glutGet(GLUT_SCREEN_WIDTH)) {
-//     //     //         old_x = glutGet(GLUT_WINDOW_X);
-//     //     //         old_y = glutGet(GLUT_WINDOW_Y);
-//     //     //         old_width = glutGet(GLUT_WINDOW_WIDTH);
-//     //     //         old_height = glutGet(GLUT_WINDOW_HEIGHT);
-//     //     //         glutFullScreen();
-//     //     //     }
-//     //     //     break;
-// 	// 	case ' ':
-// 	// 		water[f][ballX][ballY] = -1000;
-// 	// 		break;
-
-//     // }
-// }
-
 
 void init(void) {
 	int i, j;
 
     w = 450;
-    // w = glutGet(GLUT_WINDOW_WIDTH);
-    // h = glutGet(GLUT_WINDOW_HEIGHT);
     h = 450;
 
-   // glEnable(GL_LIGHTING);
-  //  glEnable(GL_LIGHT0);
     glEnable(GL_DEPTH_TEST);
 
 	for( i = 0; i < WATERSIZE; i++) 
@@ -363,9 +305,6 @@ void init(void) {
 int
 main(int argc, char** argv)
 {
-    
-
-   // srand(time(NULL));
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(50, 50);
@@ -373,7 +312,8 @@ main(int argc, char** argv)
     glutInit(&argc, argv);
 
 	// setting initial parameters from main.cpp
-	     //Ball Starting position
+	    
+		//Ball Starting position
      	ballX = width/2 - 5 ;
      	ballY = height/2 - 5;
 
@@ -391,10 +331,6 @@ main(int argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
 
-    // glutKeyboardFunc(keyboard);
-    // glutMouseFunc(mouse);
-    // glutMotionFunc(motion);
-
     glEnable (GL_DEPTH_TEST);
 
     if(argc == 2) {
@@ -405,12 +341,9 @@ main(int argc, char** argv)
         sscanf(argv[1], "%d", &depth);
     }
 
-	// printf("Water Simulation \n");
     init();
 
     glutIdleFunc(idle);
     glutMainLoop();
     return 0;
 }
-
-
