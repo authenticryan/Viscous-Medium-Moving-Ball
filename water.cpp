@@ -6,6 +6,7 @@
 #include "gl_helper.h"
 #include <time.h>
 
+// Variable declaration for the the waves
 #define BOUNDS    1
 #define WATERSIZE 450
 #define DAMP 20
@@ -17,6 +18,7 @@ int h, w;                    /* height, width  of window */
 int old_x, old_y, move_z;
 int depth = 3;
 int i = 0, counter = 0;
+// End of variable declaration for the ripples
 
 // for the ping pong program  
 // starts here -----------------------
@@ -28,7 +30,6 @@ double time1;
 
 int LeftY=0;
 int RightY=0;
-int Racketspeed=5;
 
 int ballX,ballY;
 int ballVelocityX = 4;
@@ -189,62 +190,30 @@ void Collisions(){
 
 }
 
-bool Between(int target, int a , int b ){
-
-int max;
-int min;
-
-if( a > b){
-
-    max = a;
-    min = b;
-
-}else{
-    max=b;
-    min=a;
-}
-
-     if( target < max && target > min)
-        return true;
-
- return false;
-
-}
 
 void display(void) {
     int i, j, tmp;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	
-
 	// Code from main.cpp
 		
 		glPushMatrix();
 
-
         glLoadIdentity();
-
         glOrtho(0 , 450 , 0 , 450 , 0 , 1);
 
+		// Set color properties
         glClearColor(0.0f, 0.0f, 0.0f, 0);
         glClear(GL_COLOR_BUFFER_BIT);
-
-
 		glColor3f(1.0, 1.0, 1.0);
+
 		//Left Racket
         gl_helper::DrawRect( 0 , LeftY, RacketWidth , RacketHeight  );
         //Right Racket
         gl_helper::DrawRect( width - 10 , RightY , RacketWidth , RacketHeight  );
         //Ball
         gl_helper::DrawRect( ballX , ballY , BallWidth , BallHeight  );
-
-
-        glMatrixMode(GL_MODELVIEW);
-
-        glLoadIdentity();
-
-        
 
         //Collision Detection
         Collisions();
@@ -277,21 +246,18 @@ void display(void) {
     glPopMatrix();
  
 	glutSwapBuffers();
-
 }
 
 int num  = 0;
 int delay = 70;
 void idle(void)
 {
+	// To ensure that the waves are periodically updated
     glutPostRedisplay();
 }
 
 void init(void) {
 	int i, j;
-
-    w = 450;
-    h = 450;
 
     glEnable(GL_DEPTH_TEST);
 
@@ -300,7 +266,7 @@ void init(void) {
 			water[0][j][i] = 0;
 			water[1][j][i] = 0;
 		}
-}
+}	
 
 int
 main(int argc, char** argv)
@@ -311,27 +277,20 @@ main(int argc, char** argv)
     glutInitWindowSize(width, height);
     glutInit(&argc, argv);
 
-	// setting initial parameters from main.cpp
-	    
-		//Ball Starting position
-     	ballX = width/2 - 5 ;
-     	ballY = height/2 - 5;
+	//Ball Starting position
+   	ballX = width/2 - 5 ;
+   	ballY = height/2 - 5;
 
-        // initial ball velocity
-     	ballVelocityY= 10;
+    // initial ball velocity
+   	ballVelocityY= 10;
      
-
-
-    	LeftY = 0;
-    	RightY = 0;
-
 	// end of setting parameters from main.cpp
 
     glutCreateWindow("Particle in volumic mesh");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
 
-    glEnable (GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     if(argc == 2) {
         if (strcmp(argv[1], "-h") == 0) {
