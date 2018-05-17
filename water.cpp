@@ -1,10 +1,3 @@
-// Pending task list
-
-// Add menu 
-
-// Add different mediums. If the meduiums change, the velocity of the ball and 
-// the length of the ripples change accordingly
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,8 +9,8 @@
 // Variable declaration for the the waves
 #define BOUNDS    1
 #define WATERSIZE 450
-#define DAMP 20
 
+int damp = 10;
 float water[2][WATERSIZE][WATERSIZE];
 
 int spin_x, spin_y, spin_z; /* x-y rotation and zoom */
@@ -26,6 +19,8 @@ int old_x, old_y, move_z;
 int depth = 3;
 int i = 0, counter = 0;
 // End of variable declaration for the ripples
+
+int red = 0 , green = 0, blue = 1;
 
 // for the ping pong program  
 // starts here -----------------------
@@ -43,9 +38,6 @@ int ballVelocityX = 4;
 float ballVelocityY =0.0f;
 float StoredVelocity = 0.0f;
 
-
-int LeftScore = 0;
-int RightScore = 0;
 
 void Reset();
 void Collisions();
@@ -73,7 +65,7 @@ void calcwater() {
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
-      		n = n - (n / DAMP);
+      		n = n - (n / damp);
 			water[f][x][y] = n;
 		}
 	}
@@ -85,7 +77,7 @@ void calcwater() {
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
-      		n = n - (n / DAMP);
+      		n = n - (n / damp);
 			water[f][x][y] = n;
 	}
 	
@@ -97,7 +89,7 @@ void calcwater() {
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
-      		n = n - (n / DAMP);
+      		n = n - (n / damp);
 			water[f][x][y] = n;
 	}
 
@@ -108,7 +100,7 @@ void calcwater() {
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
-      		n = n - (n / DAMP);
+      		n = n - (n / damp);
 			water[f][x][y] = n;
 	}
 	y = WATERSIZE-1;
@@ -118,7 +110,7 @@ void calcwater() {
 				  water[t][x][y-1] 
 				  ) /2;
 			n -= water[f][x][y];
-      		n = n - (n / DAMP);
+      		n = n - (n / damp);
 			water[f][x][y] = n;
 	}
 
@@ -152,7 +144,6 @@ void Collisions(){
 
         StoredVelocity += ballVelocityY;
 
-//	printf("Value of stored velocity %f\n", StoredVelocity);
 
         // To ensure that the ball bounces
         if(StoredVelocity > 10.0f){
@@ -183,14 +174,8 @@ void Collisions(){
     //Ball at top Edge
     }else if( ballY > 440 ){
 
-//	printf("Ball position in the y axis before: %d\n", ballY);
         ballY = 440;
-//	printf("Ball position in the y axis: %d\n", ballY);
-//      printf("Ball velocity y before: %f\n", ballVelocityY);
-        
         ballVelocityY = -ballVelocityY;
-//      printf("Ball velocity y: %f\n", ballVelocityY);
-
     }
 
 	water[f][(ballX+5)%WATERSIZE][(ballY+5)%WATERSIZE] = -100;
@@ -242,7 +227,7 @@ void display(void) {
 	glBegin(GL_POINTS);
 	for(i = 0; i < WATERSIZE; i++) {
 		for(j = 0; j < WATERSIZE; j++) {
-				glColor3f(0,0,1);
+				glColor3f(red, green,blue);
     			glVertex3f(j-WATERSIZE/2, i-WATERSIZE/2, water[t][j][i]);
 		}
 	}
@@ -273,7 +258,42 @@ void init(void) {
 			water[0][j][i] = 0;
 			water[1][j][i] = 0;
 		}
-}	
+}
+
+void
+keyboard(unsigned char key, int x, int y)
+{
+    switch (key) {
+        case '1':
+				// water
+				red = 0;
+				green = 0;
+				blue = 1;
+				damp = 10;
+            break;
+        case '2':
+				// oil
+                damp = 100;		
+				red = 1; 
+				green = 1;
+				blue = 0;
+            break;
+        case '3':
+				// rubbing alchol
+				red = 1;
+				green = 1;
+				blue = 1;
+				damp = 5;
+            break;
+		case '0':
+				// exit the system
+                exit(0);
+			break;
+
+    }
+}
+
+
 
 int
 main(int argc, char** argv)
@@ -284,18 +304,21 @@ main(int argc, char** argv)
     glutInitWindowSize(width, height);
     glutInit(&argc, argv);
 
-	//Ball Starting position
-   	ballX = width/2 - 5 ;
-   	ballY = height/2 - 5;
+
+    //Ball Starting position
+    ballX = width/2 - 5 ;
+    ballY = height/2 - 5;
 
     // initial ball velocity
-   	ballVelocityY= 10;
+    ballVelocityY= 10;
      
-	// end of setting parameters from main.cpp
+    // end of setting parameters from main.cpp
 
     glutCreateWindow("Particle in volumic mesh");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+	glutKeyboardFunc(keyboard);
+
 
     glEnable(GL_DEPTH_TEST);
 
