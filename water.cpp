@@ -1,3 +1,10 @@
+// Pending task list
+
+// Add menu 
+
+// Add different mediums. If the meduiums change, the velocity of the ball and 
+// the length of the ripples change accordingly
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -145,7 +152,7 @@ void Collisions(){
 
         StoredVelocity += ballVelocityY;
 
-		printf("Value of stored velocity %f\n", StoredVelocity);
+//	printf("Value of stored velocity %f\n", StoredVelocity);
 
         // To ensure that the ball bounces
         if(StoredVelocity > 10.0f){
@@ -176,13 +183,13 @@ void Collisions(){
     //Ball at top Edge
     }else if( ballY > 440 ){
 
-		printf("Ball position in the y axis before: %d\n", ballY);
+//	printf("Ball position in the y axis before: %d\n", ballY);
         ballY = 440;
-		printf("Ball position in the y axis: %d\n", ballY);
-        printf("Ball velocity y before: %f\n", ballVelocityY);
+//	printf("Ball position in the y axis: %d\n", ballY);
+//      printf("Ball velocity y before: %f\n", ballVelocityY);
         
         ballVelocityY = -ballVelocityY;
-        printf("Ball velocity y: %f\n", ballVelocityY);
+//      printf("Ball velocity y: %f\n", ballVelocityY);
 
     }
 
