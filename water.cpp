@@ -314,7 +314,7 @@ main(int argc, char** argv)
      
     // end of setting parameters from main.cpp
 
-    glutCreateWindow("Particle in volumic mesh");
+    glutCreateWindow("Bob in a liquid medium");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
