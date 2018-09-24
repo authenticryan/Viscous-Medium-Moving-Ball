@@ -1,7 +1,12 @@
-# Computer-Graphics
-This is the offical repository for the computer graphics mini project. 
+PROJECT IS NOT BEING MAINTAINED
 
+- Code has become a spagatee version as there were a lot of late night modifications and getting it stable 
+  become a challange
 
-1. Print name on the screen. bottom right. 
-2. Make the bob ossilate across the screen, boucing across the edges.
-3. It acclerates when it touches the left and right edge
+- water.sh is the execution script
+
+- water.cpp is the main c program that similates the waves
+
+- relies on glut32.dll !!important!!
+
+- ripple is the executable file. UNIX Exclusive as the dll are for unix environment

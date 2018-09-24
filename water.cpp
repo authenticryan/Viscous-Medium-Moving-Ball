@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include <cstdlib>
 #include <stdlib.h>
 #include <string.h>
 #include <GL/glut.h>
 #include <math.h>
 #include "gl_helper.h"
+#include <GL/freeglut.h>
 #include <time.h>
+#include<string>
 
 // Variable declaration for the the waves
 #define BOUNDS    1
@@ -18,11 +21,12 @@ int h, w;                    /* height, width  of window */
 int old_x, old_y, move_z;
 int depth = 3;
 int i = 0, counter = 0;
+int view=0;
 // End of variable declaration for the ripples
 
 int red = 0 , green = 0, blue = 1;
 
-// for the ping pong program  
+// for the ping pong program
 // starts here -----------------------
 const int width = 450 , height = 450 ;
 const int RacketWidth = 10 , RacketHeight = 460;
@@ -60,8 +64,8 @@ void calcwater() {
 	for(y = 1; y < WATERSIZE-1; y++) {
 		for(x = 1; x < WATERSIZE-1; x++) {
 			n = ( water[t][x-1][y] +
-				  water[t][x+1][y] + 
-				  water[t][x][y-1] + 
+				  water[t][x+1][y] +
+				  water[t][x][y-1] +
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
@@ -73,19 +77,19 @@ void calcwater() {
 	y = 0;
 	for(x = 1; x < WATERSIZE-1; x++) {
 			n = ( water[t][x-1][y] +
-				  water[t][x+1][y] + 
+				  water[t][x+1][y] +
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
       		n = n - (n / damp);
 			water[f][x][y] = n;
 	}
-	
-	
+
+
 	x = 0;
 	for(y = 1; y < WATERSIZE-1; y++) {
-			n = ( water[t][x+1][y] + 
-				  water[t][x][y-1] + 
+			n = ( water[t][x+1][y] +
+				  water[t][x][y-1] +
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
@@ -96,7 +100,7 @@ void calcwater() {
 	x = WATERSIZE-1;
 	for(y = 1; y < WATERSIZE-1; y++) {
 			n = ( water[t][x-1][y] +
-				  water[t][x][y-1] + 
+				  water[t][x][y-1] +
 				  water[t][x][y+1]
 				  ) /2;
 			n -= water[f][x][y];
@@ -106,8 +110,8 @@ void calcwater() {
 	y = WATERSIZE-1;
 	for(x = 1; x < WATERSIZE-1; x++) {
 			n = ( water[t][x-1][y] +
-				  water[t][x+1][y] + 
-				  water[t][x][y-1] 
+				  water[t][x+1][y] +
+				  water[t][x][y-1]
 				  ) /2;
 			n -= water[f][x][y];
       		n = n - (n / damp);
@@ -182,14 +186,74 @@ void Collisions(){
 
 }
 
+float p;
+const float gradient[3][3]={{0.05,0.05,0.05},{1,0.3,0},{1,1,0.625}};
+
+inline void color(float p){
+	int i;
+	float col[3];
+
+	if(p<=0.5){
+		p*=2;
+		for(i=0;i<3;++i)
+			col[i]=p*gradient[1][i]+(1-p*3)*gradient[0][i];
+	}
+	else{
+		p=(p-0.5)*2;
+		for(i=0;i<3;++i)
+			col[i]=p*gradient[2][i]+(1-p*2)*gradient[1][i];
+	}
+	glColor3fv(col);
+}
+using namespace std;
+
+
+std::string s1="Ripple Program";
+string s11="Bob in a ";
+string s12="Liquid medium";
+string s2="Ryan Dsouza \t1PE15CS129  \n Sachin Patodia \t1PE15CS133";
+int window_w=450,window_h=450;
+long long int count;
 
 void display(void) {
     int i, j, tmp;
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	if(count++<=500){
+			glPushMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glOrtho(0,window_w,0,window_h,0,2);
+			glMatrixMode(GL_MODELVIEW);
+			if(count<=180)	p=count/180.0f;
+			else			p=1-max((count-480)/120.0f,0.0f);
+/*I changed*/			color(1-p);
+			glLoadIdentity();
+			glTranslatef((window_w-glutStrokeLength(GLUT_STROKE_ROMAN,(const unsigned char*)s1.c_str())*0.33)/2,(window_h-glutStrokeHeight(GLUT_STROKE_ROMAN)*0.33)/2,0);
+			glScalef(0.19,0.19,1);
+			glutStrokeString(GLUT_STROKE_ROMAN,(const unsigned char*)s11.c_str());
+			glLineWidth(3);
+			glutStrokeString(GLUT_STROKE_ROMAN,(const unsigned char*)s12.c_str());
+
+			glLoadIdentity();
+			glLineWidth(1);
+			glTranslatef(0,glutStrokeHeight(GLUT_STROKE_ROMAN)*0.3,0);
+			glTranslatef(window_w/2-90,20,0);
+			glScalef(0.15,0.15,1);
+			glutStrokeString(GLUT_STROKE_ROMAN,(const unsigned char*)s2.c_str());
+
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+		}
+
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Code from main.cpp
-		
+
 		glPushMatrix();
 
         glLoadIdentity();
@@ -222,7 +286,7 @@ void display(void) {
     glRotatef(spin_x, 0, 1, 0);
     glRotatef(spin_y, 1, 0, 0);
 
-    
+
 	calcwater();
 	glBegin(GL_POINTS);
 	for(i = 0; i < WATERSIZE; i++) {
@@ -236,7 +300,7 @@ void display(void) {
 	tmp = t; t = f; f = tmp;
 
     glPopMatrix();
- 
+
 	glutSwapBuffers();
 }
 
@@ -253,15 +317,15 @@ void init(void) {
 
     glEnable(GL_DEPTH_TEST);
 
-	for( i = 0; i < WATERSIZE; i++) 
+	for( i = 0; i < WATERSIZE; i++)
 		for( j = 0; j < WATERSIZE; j++) {
 			water[0][j][i] = 0;
 			water[1][j][i] = 0;
 		}
 }
 
-void
-keyboard(unsigned char key, int x, int y)
+
+void keyboard(unsigned char key, int x, int y)
 {
     switch (key) {
         case '1':
@@ -273,8 +337,8 @@ keyboard(unsigned char key, int x, int y)
             break;
         case '2':
 				// oil
-                damp = 100;		
-				red = 1; 
+                damp = 100;
+				red = 1;
 				green = 1;
 				blue = 0;
             break;
@@ -295,8 +359,7 @@ keyboard(unsigned char key, int x, int y)
 
 
 
-int
-main(int argc, char** argv)
+int main(int argc, char** argv)
 {
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -311,7 +374,7 @@ main(int argc, char** argv)
 
     // initial ball velocity
     ballVelocityY= 10;
-     
+
     // end of setting parameters from main.cpp
 
     glutCreateWindow("Bob in a liquid medium");
@@ -330,7 +393,7 @@ main(int argc, char** argv)
         sscanf(argv[1], "%d", &depth);
     }
 
-    init();
+    	 init();
 
     glutIdleFunc(idle);
     glutMainLoop();
